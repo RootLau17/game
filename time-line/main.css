@@ -1,0 +1,138 @@
+*,
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.score {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.score .team {
+    height: 202px;
+    width: 190px;
+    font-size: 38px;
+    font-weight: bold;
+    color: #FFF;
+    text-align: center;
+    line-height: 220px;
+    background-size: cover;
+    position: relative;
+}
+
+.play-area {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 65%;
+  flex-direction: column;
+  padding: 12px;
+}
+
+.line-content {
+    width: 35%;
+    height: 100%;
+    overflow: auto;
+    padding: 12px;
+    padding-left: 100px;
+}
+
+.card-item img{
+    width: 180px;
+}
+
+.game-card {
+    margin-top: 48px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-card img {
+    width: 350px;
+    border-radius: 6px;
+    box-shadow: 8px 4px 8px 4px #0004741F;
+    cursor: pointer;
+}
+
+.description {
+    color: #02223A;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 16px 0;
+}
+
+.el-timeline-item__timestamp.is-top {
+    font-size: 16px;
+    color: #056ed9;
+}
+
+.operation {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 36px;
+    bottom: 0;
+}
+.operation div {
+    flex: 1 1 50%;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+}
+
+.spliter {
+    display: inline-block;
+    height: 100%;
+    width: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.operation div:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.operation div:nth-child(1) {
+    border-bottom-left-radius: 25px;
+}
+
+.operation div:nth-child(3) {
+    border-bottom-right-radius: 25px;
+}
+
+.red div {
+    background-color: #f8a8ea;
+}
+
+.green div {
+    background-color: #c7dbb7;
+}
+
+.blue div {
+    background-color: #a8c4f8;
+}
+
+.el-message .el-message-icon--info {
+    display: none;
+}
+
+.el-message--info {
+    background: transparent;
+    border: none;
+}

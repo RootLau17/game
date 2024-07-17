@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/element-plus/dist/index.css"
+    />
+    <link rel="stylesheet" href="./main.css">
+    <script src="https://unpkg.com/element-plus"></script>
+    
+</head>
+<body>
+    <div id="app">
+      <div class="layout">
+        <div class="line-content">
+          <el-timeline style="max-width: 600px">
+            <el-timeline-item
+              v-for="(card, index) in displayedTimeLineCards"
+              :key="index"
+              :timestamp="`${card.year}年`"
+              placement="top"
+              type='primary'
+              size='large'
+            >
+              <div class="card-item">
+                <el-popover placement="right" :width="220">
+                  <div style="display: flex;">
+                    <el-button size="small" type="primary" @click="() => insert(index, 0)">
+                      Insert Above
+                    </el-button>
+                    <el-button style="margin-left: 12px;" size="small" type="primary" @click="() => insert(index, 1)">
+                      Insert Blow
+                    </el-button>
+                  </div>
+                  <template #reference>
+                    <img :src="`./images/front/${card.description}.jpg`" alt="">
+                  </template>
+                </el-popover>
+              </div>
+            </el-timeline-item>
+          </el-timeline>
+        </div>
+        <div class="play-area">
+          <div class="score">
+            <div v-for="(item, index) in teamScore" :style="{backgroundImage: `url(./images/${index}.jpg)`}" class="team">
+              {{ item.score}}
+              <div :class="`operation ${index}`">
+                <div @click="() => changeScore(item, 1)">+</div>
+                <span class="spliter"></span>
+                <div @click="() => changeScore(item, -0.5)" >-</div>
+              </div>
+            </div>
+          </div>
+          <div class="game-card">
+            <img src="./images//cover.jpg" alt="" v-if="showCover">
+            <img v-else :src="`./images/front/${currentCardToBeChosen.description}.jpg`" alt="">
+            <span class="description">{{ currentCardToBeChosen.description }}</span>
+            <el-button type="primary" @click="next">Next Picture</el-button>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+<script>
+    const { createApp, ref, computed, h } = Vue
+    const { ElMessage } = ElementPlus;
+  
+    const app = createApp({
+      setup() {
+        const timeLineCards = ref([
+          {
+            description: '发明啤酒',
+            year: 1424
+          },
+        ]);
+        const teamScore = ref({
+          red: {
+            score: 0,
+            background: '#FCECED' 
+          },
+          blue: {
+            score: 0,
+            background: '#EAF2FF'
+          },
+          green: {
+            score: 0,
+            background: '#E7F5F2'
+          },
+        });
+        const allCards = ref([
+          {
+            description: '发明啤酒',
+            year: 1424
+          },
+          {
+            description: '发明眼镜',
+            year: 1315
+          },
+          {
+            description: '牧羊',
+            year: -9200
+          }
+        ])
+        const currentCardIndex = ref(1);
+        const showCover = ref(true);
+        
+        const displayedTimeLineCards = computed(() => {
+          return timeLineCards.value.toSorted((a, b) => a.year - b.year)
+        })
+
+        const currentCardToBeChosen = computed(() => {
+          return allCards.value[currentCardIndex.value]
+        })
+
+        const next = () => {
+          showCover.value = true;
+          currentCardIndex.value++;
+        }
+
+        const insert = (index, direction) => {
+          if (!showCover.value) {
+            return;
+          }
+          timeLineCards.value.splice(index, 0, currentCardToBeChosen.value);
+          showCover.value = false;
+          const realIndex = displayedTimeLineCards.value.findIndex(card => card.description === currentCardToBeChosen.value.description);
+          if (realIndex !== index + direction) {
+            ElMessage({
+              message: h('img', { src: './images/wrong.png' }),
+            });
+          } else {
+            ElMessage({
+              message: h('img', { src: './images/correct.png' }),
+            });
+          }
+        }
+
+        const changeScore = (team, score) => {
+          team.score += score;
+        }
+ 
+        return {
+          timeLineCards,
+          teamScore,
+          displayedTimeLineCards,
+          currentCardIndex,
+          currentCardToBeChosen,
+          showCover,
+          next,
+          insert,
+          changeScore
+        }
+      }
+    })
+    app.use(ElementPlus);
+    app.mount('#app');
+  </script>
+</html>
