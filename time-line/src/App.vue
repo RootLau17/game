@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {nanoid} from "nanoid"; nanoid()
 import { reactive, ref } from 'vue'
-
 const getFrontFileName = function(fileName){
     return './src/source/front/' + fileName + '.jpg'
 }
@@ -35,16 +34,16 @@ const addNodePoint = async function(){
     if(form.direction == '上'){
         items.splice(index,0,{
             id:nanoid(10),
-            year: form.year,
-            description: form.description,
-            cardUrl: getFrontFileName(form.fileName)
+            year: yearFileMap[originalFiles[currentIndex.value]],
+            description: descriptionMap[originalFiles[currentIndex.value]],
+            cardUrl: getFrontFileName(originalFiles[currentIndex.value])
         })
     }else{
-        items.splice(index-1,0,{
+        items.splice(index+1,0,{
             id:nanoid(10),
-            year: form.year,
-            description: form.description,
-            cardUrl: getFrontFileName(form.fileName)
+            year: yearFileMap[originalFiles[currentIndex.value]],
+            description: descriptionMap[originalFiles[currentIndex.value]],
+            cardUrl: getFrontFileName(originalFiles[currentIndex.value])
         })
     }
     resetForm()
@@ -62,57 +61,15 @@ const ranks = reactive([{
 },])
 
 const resetForm = function() {
-    form.description = ''
     form.direction = ''
-    form.year = ''
-    form.fileName = ''
 
     dialogFormVisible.value = false
     currentPointId.value = ''
 }
-const addCurrentIndex = function(){
-    frontOrOpposite.value = 'opposite'
-    currentIndex.value = (currentIndex.value + 1) % originalFiles.length
-}
 
-const items = reactive([{
-    id:nanoid(10),
-    year: '1000',
-    description: '发明啤酒',
-    cardUrl: getFrontFileName('发明啤酒')
-},{
-    id:nanoid(10),
-    year: '1000',
-    description: '发明啤酒',
-    cardUrl: getFrontFileName('发明啤酒')
-},{
-    id:nanoid(10),
-    year: '1000',
-    description: '发明啤酒',
-    cardUrl: getFrontFileName('发明啤酒')
-},{
-    id:nanoid(10),
-    year: '1000',
-    description: '发明啤酒',
-    cardUrl: getFrontFileName('发明啤酒')
-}])
-let dialogFormVisible = ref(false)
-let currentPointId = ref('')
-let form = reactive({
-    description:'',
-    year:'',
-    fileName:'',
-    direction:'',
-})
-let originalFiles = reactive([
-    '发明啤酒','苏武牧羊'
-].sort(() => 0.5 - Math.random()))
-let currentIndex = ref(0)
-let frontOrOpposite = ref('opposite')
 const changePoint = async function(item){
     dialogFormVisible.value = true
     currentPointId.value = item.id;
-    console.log(item.id)
 }
 const getStyle = function(rank){
     return `background-color:${rank.color};width:100px;height:100px;display:flex;justify-content:center;align-items:center;margin-right: 30px;`
@@ -127,6 +84,44 @@ const subScore = function(rank){
         rank.score = 0
     }
 }
+const addCurrentIndex = function(){
+    frontOrOpposite.value = 'opposite'
+    currentIndex.value = (currentIndex.value + 1) % originalFiles.length
+}
+let originalFiles = reactive([
+    '发明啤酒','牧羊','发明眼镜'
+].sort(() => 0.5 - Math.random()))
+let yearFileMap = {
+    '发明啤酒': '1000',
+    '牧羊': '-9200',
+    '发明眼镜':'1315'
+}
+let descriptionMap = {
+    '发明啤酒': '发明啤酒',
+    '牧羊': '牧羊',
+    '发明眼镜':'发明眼镜'
+}
+const items = reactive([{
+    id:nanoid(10),
+    year: yearFileMap[originalFiles[0]],
+    description: originalFiles[0],
+    cardUrl: getFrontFileName(originalFiles[0])
+}])
+const options = [
+    { value: '上', label: '上' },
+    { value: '下', label: '下' },
+]
+let dialogFormVisible = ref(false)
+let currentPointId = ref('')
+let form = reactive({
+    description:'',
+    year:'',
+    fileName:'',
+    direction:'',
+})
+
+let currentIndex = ref(1)
+let frontOrOpposite = ref('opposite')
 </script>
 
 <template>
@@ -160,16 +155,19 @@ const subScore = function(rank){
     <el-dialog v-model="dialogFormVisible" title="添加或删除卡片" width="500">
         <el-form :model="form">
             <el-form-item label="添加方向" :label-width="100">
-                <el-input v-model="form.direction" autocomplete="off" />
-            </el-form-item>
-            <el-form-item label="描述" :label-width="100">
-                <el-input v-model="form.description" autocomplete="off" />
-            </el-form-item>
-            <el-form-item label="年份" :label-width="100">
-                <el-input v-model="form.year" autocomplete="off" />
-            </el-form-item>
-            <el-form-item label="文件名" :label-width="100">
-                <el-input v-model="form.fileName" autocomplete="off" />
+                <el-select
+                    v-model="form.direction"
+                    placeholder="Select"
+                    size="large"
+                    style="width: 240px"
+                >
+                    <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    />
+                </el-select>
             </el-form-item>
         </el-form>
         <template #footer>
