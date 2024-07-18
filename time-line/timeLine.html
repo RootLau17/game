@@ -72,12 +72,6 @@
     const app = createApp({
       setup() {
         const currentTeamIndex = ref('red');
-        const timeLineCards = ref([
-          {
-            description: '发明啤酒',
-            year: 1424
-          },
-        ]);
         const teamScore = ref({
           red: {
             score: 0,
@@ -105,7 +99,8 @@
             description: '牧羊',
             year: -9200
           }
-        ])
+        ].sort(() => 0.5- Math.random() ))
+        const timeLineCards = ref([allCards.value[0]]);
         const currentCardIndex = ref(1);
         const showCover = ref(true);
         
