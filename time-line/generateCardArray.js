@@ -18,6 +18,6 @@ function parseFolder(folderPath) {
 }
 
 // 示例使用
-const folderPath = path.join(__dirname, 'images', 'front');
+const folderPath = path.join(__dirname, 'images', 'new');
 const parsedData = parseFolder(folderPath);
-console.log(parsedData.toString());
+console.log(JSON.stringify(parsedData));
