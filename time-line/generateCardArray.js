@@ -20,4 +20,4 @@ function parseFolder(folderPath) {
 // 示例使用
 const folderPath = path.join(__dirname, 'images', 'front');
 const parsedData = parseFolder(folderPath);
-console.log(parsedData);
+console.log(parsedData.toString());
