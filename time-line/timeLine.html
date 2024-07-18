@@ -58,7 +58,7 @@
           <div class="game-card">
             <img src="./images//cover.jpg" alt="" v-if="showCover">
             <img v-else :src="`./images/front/${currentCardToBeChosen.description}.jpg`" alt="">
-            <span class="description">{{ currentCardToBeChosen.description }}</span>
+            <span class="description">事件：{{ currentCardToBeChosen.description }}</span>
             <el-button type="primary" @click="next">Next Picture</el-button>
           </div>
         </div>
