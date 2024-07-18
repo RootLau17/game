@@ -72,6 +72,16 @@
     const app = createApp({
       setup() {
         const currentTeamIndex = ref('red');
+        const collectSounds = ref([
+          new Audio('./audio/collect.wav'),
+          new Audio('./audio/collect.wav'),
+          new Audio('./audio/collect.wav'),
+        ])
+        const errorSounds = ref([
+          new Audio('./audio/fail.wav'),
+          new Audio('./audio/fail.wav'),
+          new Audio('./audio/fail.wav'),
+        ])
         const teamScore = ref({
           red: {
             score: 0,
@@ -155,17 +165,23 @@
               message: h('img', { src: './images/wrong.png' }),
             });
             changeScore(teamScore.value[currentTeamIndex.value], -1);
+            playRandomSound(errorSounds.value)
           } else {
             ElMessage({
               message: h('img', { src: './images/correct.png' }),
             });
             changeScore(teamScore.value[currentTeamIndex.value], 1);
+            playRandomSound(collectSounds.value)
           }
           currentTeamIndex.value = getNextIndex(currentTeamIndex.value);
         }
 
         const changeScore = (team, score) => {
           team.score += score;
+        }
+        const playRandomSound = (sounds) => {
+          const sound = sounds[Math.floor(Math.random() * sounds.length)];
+          sound.play();
         }
  
         return {

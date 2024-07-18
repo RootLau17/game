@@ -1,0 +1,1 @@
+import{_ as e,o as t,c as s,a as o}from"./index-KyaxgmTg.js";const c={},a={class:"about"},i=o("h1",null,"This is an about page",-1),n=[i];function _(r,l){return t(),s("div",a,[...n])}const d=e(c,[["render",_],["__file","D:/Projects/time-line/time-line/src/views/AboutView.vue"]]);export{d as default};
