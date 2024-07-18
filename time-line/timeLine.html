@@ -29,7 +29,7 @@
                                     </el-button>
                                 </div>
                                 <template #reference>
-                    <img :src="`./images/front/${card.description}_${card.year}.jpg`" alt="">
+                    <img :src="`./images/front/${card.description}_${card.year}.png`" alt="">
                   </template>
                             </el-popover>
                         </div>
@@ -49,7 +49,7 @@
                 </div>
                 <div class="game-card">
                     <img src="./images//cover.jpg" alt="" v-if="showCover">
-                    <img v-else :src="`./images/front/${currentCardToBeChosen.description}.jpg`" alt="">
+                    <img v-else :src="`./images/front/${currentCardToBeChosen.description}_${currentCardToBeChosen.year}.png`" alt="">
                     <span class="description">事件：{{ currentCardToBeChosen.description }}</span>
                     <el-button type="primary" @click="next">Next Picture</el-button>
                 </div>
@@ -101,14 +101,271 @@
                 },
             });
             const allCards = ref([{
-                description: '发明啤酒',
-                year: 1424
+                "description": "三家分晋",
+                "year": -403,
+                extraQustion: {
+                    qustion: '三家分晋是哪三家？',
+                    answer: '韩、赵、魏',
+                    score: 2,
+                }
             }, {
-                description: '发明眼镜',
-                year: 1315
+                "description": "丝绸之路",
+                "year": -114,
+                extraQustion: {
+                    qustion: '谁出使西域，首次开辟丝绸之路？',
+                    answer: '张骞',
+                    score: 1,
+                }
             }, {
-                description: '牧羊',
-                year: -9200
+                "description": "中国出现铁器",
+                "year": -1510
+            }, {
+                "description": "九品中正制",
+                "year": 220,
+                extraQustion: {
+                    qustion: '公元220年，谁建立了九品中正制？',
+                    answer: '曹丕',
+                    score: 1,
+                }
+            }, {
+                "description": "二里头文化",
+                "year": -1735
+            }, {
+                "description": "京剧出现",
+                "year": 1790
+            }, {
+                "description": "佛教传入中国",
+                "year": 67
+            }, {
+                "description": "元朝建立",
+                "year": 1271
+            }, {
+                "description": "兰亭序",
+                "year": 353
+            }, {
+                "description": "内阁制度建立",
+                "year": 1402,
+            }, {
+                "description": "北京猿人",
+                "year": -700000
+            }, {
+                "description": "原始农业起源",
+                "year": -10000
+            }, {
+                "description": "史记成书",
+                "year": -104,
+                extraQustion: {
+                    qustion: '谁写了史记？他遭受了什么样的刑罚？',
+                    answer: '司马迁，被宫刑',
+                    score: 1,
+                }
+            }, {
+                "description": "唐朝建立",
+                "year": 618,
+                extraQustion: {
+                    qustion: '唐太祖是谁？他最初的太子是谁？',
+                    answer: '李渊，李建成',
+                    score: 1,
+                }
+            }, {
+                "description": "商汤灭夏",
+                "year": -1600
+            }, {
+                "description": "商鞅变法",
+                "year": -356
+            }, {
+                "description": "大禹建立夏朝",
+                "year": -2070
+            }, {
+                "description": "孔子诞生",
+                "year": -551,
+                extraQustion: {
+                    qustion: '孔子是春秋时期的哪国人？在今哪个省份？',
+                    answer: '鲁国人，山东曲阜',
+                    score: 1,
+                }
+            }, {
+                "description": "安史之乱",
+                "year": 755,
+                extraQustion: {
+                    qustion: '安史之乱中，最重要的一场战役是？唐军的领导者是谁？',
+                    answer: '睢阳之战，张巡',
+                    score: 2,
+                }
+            }, {
+                "description": "宋朝建立",
+                "year": 960,
+                extraQustion: {
+                    qustion: '宋太祖是谁，他夺得皇位后用了什么著名的计谋稳固皇位？',
+                    answer: '赵匡胤，杯酒释兵权',
+                    score: 1,
+                }
+            }, {
+                "description": "平王东迁",
+                "year": -770
+            }, {
+                "description": "废除宰相制度",
+                "year": 1380
+            }, {
+                "description": "建立行省制",
+                "year": 1260
+            }, {
+                "description": "张骞出使西域",
+                "year": -139
+            }, {
+                "description": "指南针发明",
+                "year": 1041
+            }, {
+                "description": "文景之治",
+                "year": -180,
+                extraQustion: {
+                    qustion: '文景之治是汉代哪两任皇帝的治世？',
+                    answer: '汉文帝，汉景帝',
+                    score: 1,
+                }
+            }, {
+                "description": "明朝建立",
+                "year": 1368,
+                extraQustion: {
+                    qustion: '明朝最初建都在哪？',
+                    answer: '南京',
+                    score: 1,
+                }
+            }, {
+                "description": "最早的纸币",
+                "year": 1023,
+                extraQustion: {
+                    qustion: '中国最早的纸币叫啥',
+                    answer: '交子',
+                    score: 1,
+                }
+            }, {
+                "description": "本草纲目成书",
+                "year": 1578
+            }, {
+                "description": "楚汉相争",
+                "year": -206,
+                extraQustion: {
+                    qustion: '列举两个秦末及楚汉相争的成语',
+                    answer: '十面埋伏，明修栈道暗度陈仓，霸王别姬，约法三章，运筹帷幄，破釜沉舟，约法三章，沐猴而冠，衣锦夜行',
+                    score: 3,
+                }
+            }, {
+                "description": "武则天登基",
+                "year": 690,
+                extraQustion: {
+                    qustion: '武则天的国号是什么',
+                    answer: '周',
+                    score: 1,
+                }
+            }, {
+                "description": "武王伐纣",
+                "year": -1046,
+                extraQustion: {
+                    qustion: '以武王伐纣为原型所创作的神仙志怪小说是？',
+                    answer: '封神演义',
+                    score: 1,
+                }
+            }, {
+                "description": "河姆渡文化",
+                "year": -5000
+            }, {
+                "description": "活字印刷",
+                "year": 1045,
+
+            }, {
+                "description": "清军入关",
+                "year": 1644
+            }, {
+                "description": "清明上河图",
+                "year": 1101,
+                extraQustion: {
+                    qustion: '清明上河图描述了北宋哪座城市的盛况',
+                    answer: '东京汴京',
+                    score: 1,
+                }
+            }, {
+                "description": "清朝建立",
+                "year": 1636
+            }, {
+                "description": "玄奘西行",
+                "year": 627,
+                extraQustion: {
+                    qustion: '玄奘西行的目的地是哪',
+                    answer: '天竺',
+                    score: 1,
+                }
+            }, {
+                "description": "王安石变法",
+                "year": 1069
+            }, {
+                "description": "科举制度第一次出现",
+                "year": 607
+            }, {
+                "description": "秦国扫六横",
+                "year": -221
+            }, {
+                "description": "秦长城完建",
+                "year": -215
+            }, {
+                "description": "红楼梦成书",
+                "year": 1791,
+                extraQustion: {
+                    qustion: '红楼梦原名什么？',
+                    answer: '石头记',
+                    score: 1,
+                }
+            }, {
+                "description": "罢黜百家独尊儒术",
+                "year": -134,
+                extraQustion: {
+                    qustion: '谁提出了罢黜百家独尊儒术？',
+                    answer: '董仲舒',
+                    score: 1,
+                }
+            }, {
+                "description": "老子诞生",
+                "year": -571,
+                extraQustion: {
+                    qustion: '老子的学派是什么？其核心思想用四个字概括是什么',
+                    answer: '道教，无为而治',
+                    score: 1,
+                }
+            }, {
+                "description": "蔡伦发明造纸术",
+                "year": 105
+            }, {
+                "description": "虎门销烟",
+                "year": 1839
+            }, {
+                "description": "设立军机处",
+                "year": 1729
+            }, {
+                "description": "赤壁之战",
+                "year": 208
+            }, {
+                "description": "越国灭吴",
+                "year": -475
+            }, {
+                "description": "道教创立",
+                "year": 142
+            }, {
+                "description": "闭关锁国",
+                "year": 7123
+            }, {
+                "description": "青铜器",
+                "year": -3000
+            }, {
+                "description": "马可波罗抵达大都",
+                "year": 1275,
+                extraQustion: {
+                    qustion: '马可波罗是哪国人？',
+                    answer: '意大利',
+                    score: 1,
+                }
+            }, {
+                "description": "黄巾起义",
+                "year": 184,
             }].sort(() => 0.5 - Math.random()))
             const timeLineCards = ref([allCards.value[0]]);
             const currentCardIndex = ref(1);
