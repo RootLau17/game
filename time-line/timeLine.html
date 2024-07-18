@@ -21,7 +21,7 @@
             <el-timeline-item
               v-for="(card, index) in displayedTimeLineCards"
               :key="index"
-              :timestamp="`${card.year}年`"
+              :timestamp="`${card.year}年&nbsp;&nbsp;&nbsp;${card.description}`"
               placement="top"
               type='primary'
               size='large'
