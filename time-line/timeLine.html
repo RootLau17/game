@@ -117,11 +117,11 @@
         })
 
         const next = () => {
-          showCover.value = true;
           if(currentCardIndex.value + 1 >= allCards.value.length){
             alert("Game Over");
             return
           }
+          showCover.value = true;
           currentCardIndex.value++;
         }
 
