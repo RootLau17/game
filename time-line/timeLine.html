@@ -72,6 +72,11 @@
     const app = createApp({
       setup() {
         const currentTeamIndex = ref('red');
+        const victorySounds = ref([
+          new Audio('./audio/victory.wav'),
+          new Audio('./audio/victory.wav'),
+          new Audio('./audio/victory.wav'),
+        ])
         const collectSounds = ref([
           new Audio('./audio/collect.wav'),
           new Audio('./audio/collect.wav'),
@@ -124,6 +129,7 @@
 
         const next = () => {
           if(currentCardIndex.value + 1 >= allCards.value.length){
+            playRandomSound(victorySounds.value)
             alert(`Game Over. The winner is ${getWinner()}.`);
             return
           }
