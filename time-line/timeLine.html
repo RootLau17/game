@@ -1,210 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/element-plus/dist/index.css"
-    />
+    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css" />
     <link rel="stylesheet" href="./main.css">
     <script src="https://unpkg.com/element-plus"></script>
-    
+
 </head>
+
 <body>
     <div id="app">
-      <div class="layout">
-        <div class="line-content">
-          <el-timeline style="max-width: 600px">
-            <el-timeline-item
-              v-for="(card, index) in displayedTimeLineCards"
-              :key="index"
-              :timestamp="`${card.year}年&nbsp;&nbsp;&nbsp;${card.description}`"
-              placement="top"
-              type='primary'
-              size='large'
-            >
-              <div class="card-item">
-                <el-popover placement="right" :width="220">
-                  <div style="display: flex;">
-                    <el-button size="small" type="primary" @click="() => insert(index, 0)">
-                      Insert Above
-                    </el-button>
-                    <el-button style="margin-left: 12px;" size="small" type="primary" @click="() => insert(index, 1)">
-                      Insert Blow
-                    </el-button>
-                  </div>
-                  <template #reference>
-                    <img :src="`./images/front/${card.description}.jpg`" alt="">
+        <div class="layout">
+            <div class="line-content">
+                <el-timeline style="max-width: 600px">
+                    <el-timeline-item v-for="(card, index) in displayedTimeLineCards" :key="index" :timestamp="`${card.year}年&nbsp;&nbsp;&nbsp;${card.description}`" placement="top" type='primary' size='large'>
+                        <div class="card-item">
+                            <el-popover placement="right" :width="220">
+                                <div style="display: flex;">
+                                    <el-button size="small" type="primary" @click="() => insert(index, 0)">
+                                        Insert Above
+                                    </el-button>
+                                    <el-button style="margin-left: 12px;" size="small" type="primary" @click="() => insert(index, 1)">
+                                        Insert Blow
+                                    </el-button>
+                                </div>
+                                <template #reference>
+                    <img :src="`./images/front/${card.description}_${card.year}.jpg`" alt="">
                   </template>
-                </el-popover>
-              </div>
-            </el-timeline-item>
-          </el-timeline>
-        </div>
-        <div class="play-area">
-          <div class="score">
-            <div v-for="(item, index) in teamScore" :style="{backgroundImage: `url(./images/${index}.jpg)`}" class="team">
-              {{ item.score}} {{index === currentTeamIndex ? '⭐' : ''}}
-              <div :class="`operation ${index}`">
-                <div @click="() => changeScore(item, 1)">+</div>
-                <span class="spliter"></span>
-                <div @click="() => changeScore(item, -1)" >-</div>
-              </div>
+                            </el-popover>
+                        </div>
+                    </el-timeline-item>
+                </el-timeline>
             </div>
-          </div>
-          <div class="game-card">
-            <img src="./images//cover.jpg" alt="" v-if="showCover">
-            <img v-else :src="`./images/front/${currentCardToBeChosen.description}.jpg`" alt="">
-            <span class="description">事件：{{ currentCardToBeChosen.description }}</span>
-            <el-button type="primary" @click="next">Next Picture</el-button>
-          </div>
+            <div class="play-area">
+                <div class="score">
+                    <div v-for="(item, index) in teamScore" :style="{backgroundImage: `url(./images/${index}.jpg)`}" class="team">
+                        {{ item.score}} {{index === currentTeamIndex ? '⭐' : ''}}
+                        <div :class="`operation ${index}`">
+                            <div @click="() => changeScore(item, 1)">+</div>
+                            <span class="spliter"></span>
+                            <div @click="() => changeScore(item, -1)">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <img src="./images//cover.jpg" alt="" v-if="showCover">
+                    <img v-else :src="`./images/front/${currentCardToBeChosen.description}.jpg`" alt="">
+                    <span class="description">事件：{{ currentCardToBeChosen.description }}</span>
+                    <el-button type="primary" @click="next">Next Picture</el-button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 </body>
 <script>
-    const { createApp, ref, computed, h } = Vue
-    const { ElMessage } = ElementPlus;
-  
+    const {
+        createApp,
+        ref,
+        computed,
+        h
+    } = Vue
+    const {
+        ElMessage
+    } = ElementPlus;
+
     const app = createApp({
-      setup() {
-        const currentTeamIndex = ref('red');
-        const victorySounds = ref([
-          new Audio('./audio/victory.wav'),
-          new Audio('./audio/victory.wav'),
-          new Audio('./audio/victory.wav'),
-        ])
-        const collectSounds = ref([
-          new Audio('./audio/collect.wav'),
-          new Audio('./audio/collect.wav'),
-          new Audio('./audio/collect.wav'),
-        ])
-        const errorSounds = ref([
-          new Audio('./audio/fail.wav'),
-          new Audio('./audio/fail.wav'),
-          new Audio('./audio/fail.wav'),
-        ])
-        const teamScore = ref({
-          red: {
-            score: 0,
-            background: '#FCECED' 
-          },
-          blue: {
-            score: 0,
-            background: '#EAF2FF'
-          },
-          green: {
-            score: 0,
-            background: '#E7F5F2'
-          },
-        });
-        const allCards = ref([
-          {
-            description: '发明啤酒',
-            year: 1424
-          },
-          {
-            description: '发明眼镜',
-            year: 1315
-          },
-          {
-            description: '牧羊',
-            year: -9200
-          }
-        ].sort(() => 0.5- Math.random()))
-        const timeLineCards = ref([allCards.value[0]]);
-        const currentCardIndex = ref(1);
-        const showCover = ref(true);
-        
-        const displayedTimeLineCards = computed(() => {
-          return timeLineCards.value.toSorted((a, b) => a.year - b.year)
-        })
+        setup() {
+            const currentTeamIndex = ref('red');
+            const victorySounds = ref([
+                new Audio('./audio/victory.wav'),
+                new Audio('./audio/victory.wav'),
+                new Audio('./audio/victory.wav'),
+            ])
+            const collectSounds = ref([
+                new Audio('./audio/collect.wav'),
+                new Audio('./audio/collect.wav'),
+                new Audio('./audio/collect.wav'),
+            ])
+            const errorSounds = ref([
+                new Audio('./audio/fail.wav'),
+                new Audio('./audio/fail.wav'),
+                new Audio('./audio/fail.wav'),
+            ])
+            const teamScore = ref({
+                red: {
+                    score: 0,
+                    background: '#FCECED'
+                },
+                blue: {
+                    score: 0,
+                    background: '#EAF2FF'
+                },
+                green: {
+                    score: 0,
+                    background: '#E7F5F2'
+                },
+            });
+            const allCards = ref([{
+                description: '发明啤酒',
+                year: 1424
+            }, {
+                description: '发明眼镜',
+                year: 1315
+            }, {
+                description: '牧羊',
+                year: -9200
+            }].sort(() => 0.5 - Math.random()))
+            const timeLineCards = ref([allCards.value[0]]);
+            const currentCardIndex = ref(1);
+            const showCover = ref(true);
 
-        const currentCardToBeChosen = computed(() => {
-          return allCards.value[currentCardIndex.value]
-        })
+            const displayedTimeLineCards = computed(() => {
+                return timeLineCards.value.toSorted((a, b) => a.year - b.year)
+            })
 
-        const next = () => {
-          if(currentCardIndex.value + 1 >= allCards.value.length){
-            playRandomSound(victorySounds.value)
-            alert(`Game Over. The winner is ${getWinner()}.`);
-            return
-          }
-          showCover.value = true;
-          currentCardIndex.value++;
-        }
+            const currentCardToBeChosen = computed(() => {
+                return allCards.value[currentCardIndex.value]
+            })
 
-        const getWinner = () => {
-          const winners = []
-          let maxScore = -99999
-          for(const index in teamScore.value){
-            if(teamScore.value[index].score > maxScore){
-              maxScore = teamScore.value[index].score
+            const next = () => {
+                if (currentCardIndex.value + 1 >= allCards.value.length) {
+                    playRandomSound(victorySounds.value)
+                    alert(`Game Over. The winner is ${getWinner()}.`);
+                    return
+                }
+                showCover.value = true;
+                currentCardIndex.value++;
             }
-          }
-          for(const index in teamScore.value){
-              if(teamScore.value[index].score === maxScore){
-              winners.push(index)
-              }
-          }
-          return winners.join(', ')
-        }
 
-        const getNextIndex = (color) => {
-          const colors = ["red", "blue", "green"];
-          const index = colors.indexOf(color);
-          return colors[(index + 1) % colors.length];
-        }
+            const getWinner = () => {
+                const winners = []
+                let maxScore = -99999
+                for (const index in teamScore.value) {
+                    if (teamScore.value[index].score > maxScore) {
+                        maxScore = teamScore.value[index].score
+                    }
+                }
+                for (const index in teamScore.value) {
+                    if (teamScore.value[index].score === maxScore) {
+                        winners.push(index)
+                    }
+                }
+                return winners.join(', ')
+            }
 
-        const insert = (index, direction) => {
-          if (!showCover.value) {
-            return;
-          }
-          timeLineCards.value.splice(index, 0, currentCardToBeChosen.value);
-          showCover.value = false;
-          const realIndex = displayedTimeLineCards.value.findIndex(card => card.description === currentCardToBeChosen.value.description);
-          if (realIndex !== index + direction) {
-            ElMessage({
-              message: h('img', { src: './images/wrong.png' }),
-            });
-            changeScore(teamScore.value[currentTeamIndex.value], -1);
-            playRandomSound(errorSounds.value)
-          } else {
-            ElMessage({
-              message: h('img', { src: './images/correct.png' }),
-            });
-            changeScore(teamScore.value[currentTeamIndex.value], 1);
-            playRandomSound(collectSounds.value)
-          }
-          currentTeamIndex.value = getNextIndex(currentTeamIndex.value);
-        }
+            const getNextIndex = (color) => {
+                const colors = ["red", "blue", "green"];
+                const index = colors.indexOf(color);
+                return colors[(index + 1) % colors.length];
+            }
 
-        const changeScore = (team, score) => {
-          team.score += score;
+            const insert = (index, direction) => {
+                if (!showCover.value) {
+                    return;
+                }
+                timeLineCards.value.splice(index, 0, currentCardToBeChosen.value);
+                showCover.value = false;
+                const realIndex = displayedTimeLineCards.value.findIndex(card => card.description === currentCardToBeChosen.value.description);
+                if (realIndex !== index + direction) {
+                    ElMessage({
+                        message: h('img', {
+                            src: './images/wrong.png'
+                        }),
+                    });
+                    changeScore(teamScore.value[currentTeamIndex.value], -1);
+                    playRandomSound(errorSounds.value)
+                } else {
+                    ElMessage({
+                        message: h('img', {
+                            src: './images/correct.png'
+                        }),
+                    });
+                    changeScore(teamScore.value[currentTeamIndex.value], 1);
+                    playRandomSound(collectSounds.value)
+                }
+                currentTeamIndex.value = getNextIndex(currentTeamIndex.value);
+            }
+
+            const changeScore = (team, score) => {
+                team.score += score;
+            }
+            const playRandomSound = (sounds) => {
+                const sound = sounds[Math.floor(Math.random() * sounds.length)];
+                sound.play();
+            }
+
+            return {
+                timeLineCards,
+                teamScore,
+                displayedTimeLineCards,
+                currentCardIndex,
+                currentCardToBeChosen,
+                showCover,
+                currentTeamIndex,
+                next,
+                insert,
+                changeScore
+            }
         }
-        const playRandomSound = (sounds) => {
-          const sound = sounds[Math.floor(Math.random() * sounds.length)];
-          sound.play();
-        }
- 
-        return {
-          timeLineCards,
-          teamScore,
-          displayedTimeLineCards,
-          currentCardIndex,
-          currentCardToBeChosen,
-          showCover,
-          currentTeamIndex,
-          next,
-          insert,
-          changeScore
-        }
-      }
     })
     app.use(ElementPlus);
     app.mount('#app');
-  </script>
+</script>
+
 </html>
