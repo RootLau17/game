@@ -99,7 +99,7 @@
             description: '牧羊',
             year: -9200
           }
-        ].sort(() => 0.5- Math.random() ))
+        ].sort(() => 0.5- Math.random()))
         const timeLineCards = ref([allCards.value[0]]);
         const currentCardIndex = ref(1);
         const showCover = ref(true);
@@ -114,11 +114,27 @@
 
         const next = () => {
           if(currentCardIndex.value + 1 >= allCards.value.length){
-            alert("Game Over");
+            alert(`Game Over. The winner is ${getWinner()}.`);
             return
           }
           showCover.value = true;
           currentCardIndex.value++;
+        }
+
+        const getWinner = () => {
+          const winners = []
+          let maxScore = -99999
+          for(const index in teamScore.value){
+            if(teamScore.value[index].score > maxScore){
+              maxScore = teamScore.value[index].score
+            }
+          }
+          for(const index in teamScore.value){
+              if(teamScore.value[index].score === maxScore){
+              winners.push(index)
+              }
+          }
+          return winners.join(', ')
         }
 
         const getNextIndex = (color) => {
