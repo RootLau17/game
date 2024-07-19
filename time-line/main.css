@@ -78,7 +78,7 @@ body {
 }
 
 .game-card img {
-    width: 350px;
+    width: 200px;
     border-radius: 6px;
     box-shadow: 8px 4px 8px 4px #0004741F;
     cursor: pointer;
