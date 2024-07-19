@@ -50,7 +50,7 @@
                 <div class="game-card">
                     <img src="./images//cover.jpg" alt="" v-if="showCover">
                     <img v-else :src="`./images/front/${currentCardToBeChosen.description}_${currentCardToBeChosen.year}.png`" alt="">
-                    <span class="description">事件：{{ currentCardToBeChosen.description }}</span>
+                    <span class="description">事件：{{ currentCardToBeChosen.description }} [{{currentCardIndex}}/{{allCards.length}}]</span>
                     <span v-if="currentCardToBeChosen.extraQuestion && !showCover" class="description">小问题：{{currentCardToBeChosen.extraQuestion.question}}  本题{{currentCardToBeChosen.extraQuestion.score}}分</span>
                     <span v-if="currentCardToBeChosen.extraQuestion && !showCover && showAnswer" class="description">答案：{{currentCardToBeChosen.extraQuestion.answer}}</span>
                     <div class="button-group">
@@ -116,11 +116,6 @@
             }, {
                 "description": "丝绸之路",
                 "year": -114,
-                extraQuestion: {
-                    question: '谁出使西域，首次开辟丝绸之路？',
-                    answer: '张骞',
-                    score: 1,
-                }
             }, {
                 "description": "中国出现铁器",
                 "year": -1510
@@ -565,6 +560,7 @@
                 currentTeamIndex,
                 timeLineItem,
                 lineContent,
+                allCards,
                 next,
                 insert,
                 changeScore,
