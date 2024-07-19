@@ -15,9 +15,9 @@
 <body>
     <div id="app">
         <div class="layout">
-            <div class="line-content">
+            <div class="line-content" ref="lineContent">
                 <el-timeline style="max-width: 600px">
-                    <el-timeline-item v-for="(card, index) in displayedTimeLineCards" :key="index" :timestamp="`${card.year}年&nbsp;&nbsp;&nbsp;${card.description}`" placement="top" type='primary' size='large'>
+                    <el-timeline-item ref="timeLineItem" v-for="(card, index) in displayedTimeLineCards" :key="index" :timestamp="`${card.year}年&nbsp;&nbsp;&nbsp;${card.description}`" placement="top" type='primary' size='large'>
                         <div class="card-item">
                             <el-popover placement="right" :width="220">
                                 <div style="display: flex;">
@@ -467,6 +467,8 @@
             const currentCardIndex = ref(1);
             const showCover = ref(true);
             const showAnswer = ref(false);
+            const timeLineItem = ref();
+            const lineContent = ref(null);
 
             const displayedTimeLineCards = computed(() => {
                 return timeLineCards.value.toSorted((a, b) => a.year - b.year)
@@ -534,6 +536,11 @@
                     playRandomSound(collectSounds.value)
                 }
                 currentTeamIndex.value = getNextIndex(currentTeamIndex.value);
+                const timeLineItemHeight = timeLineItem.value[0].$el.clientHeight;
+                lineContent.value.scrollTo({
+                    top: timeLineItemHeight * realIndex,
+                    behavior: 'smooth'
+                });
             }
 
             const changeScore = (team, score) => {
@@ -556,6 +563,8 @@
                 showCover,
                 showAnswer,
                 currentTeamIndex,
+                timeLineItem,
+                lineContent,
                 next,
                 insert,
                 changeScore,
